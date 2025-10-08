@@ -1,0 +1,39 @@
+name: Build and Test Java Project
+
+# 🚀 Kör varje gång du pushar till main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub kör detta på Linux
+
+    steps:
+      # 1️⃣ Klona din kod
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Installera Java
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # 3️⃣ Ge körbarhet till gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 4️⃣ Bygg projektet med Gradle
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # 5️⃣ (Valfritt) Ladda upp byggresultatet
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-jar
+          path: build/libs/*.jar
