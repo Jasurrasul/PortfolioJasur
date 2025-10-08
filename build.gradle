@@ -1,14 +1,15 @@
 plugins {
-    id 'org.springframework.boot' version '3.3.3'
-    id 'io.spring.dependency-management' version '1.1.5'
     id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17) // eller 21 om du kör det
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -17,30 +18,29 @@ repositories {
 }
 
 dependencies {
+    // Web & Validation
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // --- JPA + Postgres ---
+    // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.postgresql:postgresql:42.7.4'
 
-    // --- Mail ---
+    // Mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // --- H2 för lokal körning + test ---
-    runtimeOnly 'com.h2database:h2'
-    testRuntimeOnly 'com.h2database:h2'
+    // Flyway (core + Postgres-modul – krävs för PG 16.x)
+    implementation 'org.flywaydb:flyway-core:10.10.0'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.10.0'
 
-    // --- Tester ---
+    // Databaser
+    runtimeOnly 'org.postgresql:postgresql:42.7.4'  // prod
+    runtimeOnly 'com.h2database:h2'                 // local/test vid behov
+
+    // Test (inkl. Flyway H2-modul om du kör tester mot H2)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //testImplementation 'org.flywaydb:flyway-database-h2:10.10.0'
 }
 
-// JUnit Platform
-tasks.withType(Test).configureEach {
+tasks.test {
     useJUnitPlatform()
-}
-
-// Vid behov: vidarebefordra systemproperties till bootRun
-tasks.named('bootRun') {
-    systemProperties = System.properties
 }
