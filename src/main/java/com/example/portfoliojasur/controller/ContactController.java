@@ -16,7 +16,7 @@ import java.util.Map;
                 "http://localhost:5500",
                 "http://127.0.0.1:5500",
                 "http://localhost:5173",
-                "https://din-frontend.up.railway.app"
+                "https://playful-chaja-84cba3.netlify.app/"
         },
         allowedHeaders = "*",
         methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS }
