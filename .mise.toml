@@ -1,0 +1,7 @@
+[tools]
+java = "17"
+gradle = "8.14.3"
+
+[env]
+SPRING_PROFILES_ACTIVE = "prod"
+
