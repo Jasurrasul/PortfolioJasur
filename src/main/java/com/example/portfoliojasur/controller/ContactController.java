@@ -36,6 +36,6 @@ public class ContactController {
 
     @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> health() {
-        return Map.of("status", "ok");
+        return Map.of("status", "okeyy");
     }
 }
