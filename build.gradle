@@ -8,61 +8,27 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    // Railway kör JDK 21 som standard – matcha detta
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
-    // Web & Validation
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    // Mail
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // Flyway (core + Postgres-modul – funkar med Boot 3.3.x)
-    implementation 'org.flywaydb:flyway-core:10.10.0'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.10.0'
-
-    // Databaser
-    runtimeOnly 'org.postgresql:postgresql:42.7.4'  // prod
-    runtimeOnly 'com.h2database:h2'                 // lokal/test
-
-    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // Om du kör tester mot H2 + Flyway:
-    // testImplementation 'org.flywaydb:flyway-database-h2:10.10.0'
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+tasks.test { useJUnitPlatform() }
 
-/**
- * Se till att vi bygger en körbar Boot-JAR och att den har ett stabilt filnamn.
- * Detta gör deploy-kommandot i Railway enklare:
- *   java -Dserver.port=$PORT -jar build/libs/PortfolioJasur.jar
- */
 tasks.named('bootJar') {
     archiveBaseName.set('PortfolioJasur')
-    archiveVersion.set('')        // inga versionssuffix
-    launchScript()                // gör jar:en körbar i *nix-miljöer (ofarligt i Windows)
+    archiveVersion.set('')
+    launchScript()
 }
-
-// Inaktivera vanlig 'jar' så vi inte får dubbla artefakter (jar + bootJar)
-tasks.named('jar') {
-    enabled = false
-}
+tasks.named('jar') { enabled = false }

@@ -1,5 +1,5 @@
 package com.example.portfoliojasur.service;
-
+/*
 import com.example.portfoliojasur.entity.ContactMessage;
 import com.example.portfoliojasur.model.ContactRequest;
 import com.example.portfoliojasur.repo.ContactMessageRepository;
@@ -42,3 +42,4 @@ public class ContactService {
         return cm;
     }
 }
+*/

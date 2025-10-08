@@ -1,5 +1,5 @@
 package com.example.portfoliojasur.entity;
-
+/*
 
 
 import jakarta.persistence.*;
@@ -36,3 +36,4 @@ public class ContactMessage {
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 }
+*/
