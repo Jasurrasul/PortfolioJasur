@@ -1,68 +1,57 @@
-/*
 package com.example.portfoliojasur;
 
-import com.example.portfoliojasur.controller.ContactController;
-import com.example.portfoliojasur.model.ContactRequest;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.OffsetDateTime;
-import java.util.Map;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest
+@AutoConfigureMockMvc
+class PortfolioJasurApplicationTests {
 
-class  PortfolioJasurApplicationTests {
-
-    private final ContactController controller = new ContactController();
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
-    @DisplayName("contact() ska returnera status=ok och innehålla receivedAt vid giltig request")
-    void contact_validRequest_returnsOk() {
-        // Arrange
-        ContactRequest req = new ContactRequest();
-        req.setName("Jasurbek");
-        req.setEmail("jasur@example.com");
-        req.setMessage("Hej från testet!");
+    void shouldReturnOk_whenValidContactRequest() throws Exception {
+        // JSON som uppfyller valideringskraven
+        String validJson = """
+            {
+              "name": "Jasur Rasulov",
+              "email": "jasur@example.com",
+              "message": "Hej! Det här är ett testmeddelande."
+            }
+            """;
 
-        // Act
-        ResponseEntity<?> response = controller.contact(req);
-
-        // Assert
-        assertEquals(200, response.getStatusCodeValue(), "Statuskod ska vara 200 OK");
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
-        assertNotNull(body, "Response body ska inte vara null");
-        assertEquals("ok", body.get("status"), "status ska vara 'ok'");
-        assertTrue(body.containsKey("receivedAt"), "ska innehålla fältet 'receivedAt'");
-
-        // Kontrollera att tiden är ett giltigt ISO-format
-        assertDoesNotThrow(() -> OffsetDateTime.parse((String) body.get("receivedAt")));
+        mockMvc.perform(post("/api/contact")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validJson))
+                .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("contact() ska logga även när message är tomt (men fortfarande returnera 200)")
-    void contact_emptyMessage_stillReturnsOk() {
-        // Arrange
-        ContactRequest req = new ContactRequest();
-        req.setName("Test");
-        req.setEmail("test@example.com");
-        req.setMessage("");
+    void shouldReturnBadRequest_whenInvalidEmail() throws Exception {
+        // Ogiltig e-post triggar valideringsfel
+        String invalidJson = """
+            {
+              "name": "Test Namn",
+              "email": "inte-en-epost",
+              "message": "Testar validering av e-post."
+            }
+            """;
 
-        // Act
-        ResponseEntity<?> response = controller.contact(req);
-
-        // Assert
-        assertEquals(200, response.getStatusCodeValue());
-        @SuppressWarnings("unchecked")
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
-        assertEquals("ok", body.get("status"));
+        mockMvc.perform(post("/api/contact")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidJson))
+                .andExpect(status().isBadRequest());
     }
 }
 
-
-*/
 
 
 
