@@ -1,4 +1,4 @@
-/*
+
 package com.example.portfoliojasur.controller;
 
 import org.springframework.core.io.Resource;
@@ -23,4 +23,3 @@ public class IndexController {
                 .body(resource);
     }
 }
-*/
