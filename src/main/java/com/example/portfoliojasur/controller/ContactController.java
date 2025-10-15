@@ -34,7 +34,7 @@ public class ContactController {
 
 // Returnera enkelt OK-svar till frontend
         return ResponseEntity.ok(Map.of(
-                "status", "ok",
+                "statuss", "ok",
                 "receivedAt", OffsetDateTime.now().toString()
         ));
     }
